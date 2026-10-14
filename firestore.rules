@@ -1,0 +1,15 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Hanya dua akun ini yang boleh membaca dan menulis data planner.
+    // Ganti UID_PASANGAN_1 dan UID_PASANGAN_2 dengan "User UID" dari menu
+    // Authentication > Users di Firebase Console.
+    match /plan/{docId} {
+      allow read, write: if request.auth != null
+        && request.auth.uid in ['UID_PASANGAN_1', 'UID_PASANGAN_2'];
+    }
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
